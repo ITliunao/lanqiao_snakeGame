@@ -34,15 +34,15 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 		while(true){
 			System.out.println();
 			if(Global.RUN == 1){
-				
-				//蛇移动时蛇身时当前的坐标*蛇的长度，蛇身相当于每一个像前面移动了一位。
 				for(int j = n.len;j >0 ; j--){
 					n.snakeX[j] = n.snakeX[j-1];
 					n.snakeY[j] = n.snakeY[j-1];
 				}
+				//蛇移动时蛇身时当前的坐标*蛇的长度，蛇身相当于每一个像前面移动了一位。
+			
 				if(Global.DIRECTION == 1){
 					//如果当前方向向上，那么蛇头向下移动。
-					n.snakeY[0]--;
+						n.snakeY[0]--;
 					//如果蛇头运动到食物位置，那么蛇身增加，食物重新出现，用蛇当前身体长度代表分数
 					if(n.snakeY[0] == food.foodY&& n.snakeX[0] == food.foodX){
 						food.create();
@@ -53,7 +53,9 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 					}
 				}
 				else if(Global.DIRECTION == 2){
+					
 					n.snakeY[0] ++;
+					
 					if(n.snakeY[0] == food.foodY&& n.snakeX[0] == food.foodX){
 						food.create();
 						n.len++;
@@ -63,7 +65,9 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 					}
 				}
 				else if(Global.DIRECTION == 3){
+					
 					n.snakeX[0]--;
+					
 					if(n.snakeY[0] == food.foodY&& n.snakeX[0] == food.foodX){
 						food.create();
 						n.len++;
@@ -73,7 +77,9 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 					}
 				}
 				else{
+					
 					n.snakeX[0]++;
+					
 					if(n.snakeY[0] == food.foodY&& n.snakeX[0] == food.foodX){
 						food.create();
 						n.len++;
@@ -86,23 +92,28 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 				for(;i <= n.len; i++){
 					//如果蛇的头部和蛇的身体任何一部分出现在同一位置，游戏结束；蛇头碰到墙壁，游戏也结束
 					if(Global.map == 1){
-						if( n.snakeY[0]  > 20||(n.snakeX[0] == n.snakeX[i] && n.snakeY[0] == n.snakeY[i])){
+						
+						if( n.snakeY[0]  > 21  ||(n.snakeX[0] == n.snakeX[i] && n.snakeY[0] == n.snakeY[i] ) ){
+							
 							JOptionPane.showMessageDialog(null,"游戏失败，" + "尊敬的用户："+user.getText().toString()+"，您的得分是" + (n.len-2)+"分");
 							Global.scores[Global.j++] = n.len-2;
 							Global.failed = 1;
 							break;
-						}else if(n.snakeY[0]  < 2 || (n.snakeX[0] == n.snakeX[i] && n.snakeY[0] == n.snakeY[i])){
+						}else if(n.snakeY[0]  < 1 || (n.snakeX[0] == n.snakeX[i] && n.snakeY[0] == n.snakeY[i])){
+							System.out.println(Global.DIRECTION);
 							JOptionPane.showMessageDialog(null,"游戏失败，" + "尊敬的用户："+user.getText().toString()+"，您的得分是" + (n.len-2)+"分");
 							Global.failed = 1;
 							Global.scores[Global.j++] = n.len-2;
 							break;
 						}
-						else if( n.snakeX[0]  < 2 || (n.snakeX[0] == n.snakeX[i] &&  n.snakeY[0] == n.snakeY[i])){
+						else if( n.snakeX[0]  < 1 || (n.snakeX[0] == n.snakeX[i] &&  n.snakeY[0] == n.snakeY[i])){
+							System.out.println(Global.DIRECTION);
 							JOptionPane.showMessageDialog(null,"游戏失败，" + "尊敬的用户："+user.getText().toString()+"，您的得分是" + (n.len-2)+"分");
 							Global.failed = 1;
 							Global.scores[Global.j++] = n.len-2;
 							break;
-						}else if( n.snakeX[0]  >36||(n.snakeX[0] == n.snakeX[i] &&  n.snakeY[0] == n.snakeY[i])){
+						}else if( n.snakeX[0]  >37||(n.snakeX[0] == n.snakeX[i] &&  n.snakeY[0] == n.snakeY[i] )){
+							System.out.println(Global.DIRECTION);
 							JOptionPane.showMessageDialog(null,"游戏失败，" + "尊敬的用户："+user.getText().toString()+"，您的得分是" + (n.len-2)+"分");
 							Global.failed = 1;
 							Global.scores[Global.j++] = n.len-2;
@@ -157,9 +168,9 @@ public class ThreadControlSnake extends JPanel implements Runnable {
 				}
 				try{
 					if(n.len > 3){
-						Thread.sleep(80);
+						Thread.sleep(140);
 					}else{
-						Thread.sleep(120);
+						Thread.sleep(160);
 					}
 				}catch(Exception e){
 

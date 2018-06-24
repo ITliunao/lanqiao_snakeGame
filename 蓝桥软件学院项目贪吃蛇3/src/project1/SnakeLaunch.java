@@ -5,7 +5,9 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.TextField;
@@ -15,10 +17,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -70,8 +74,7 @@ public class SnakeLaunch extends JPanel{
 	JFrame frame = new JFrame();
 	Music music = new Music();
 	// SnakeLaunch构造方法
-	public SnakeLaunch(JTextField user) {
-		
+	public SnakeLaunch(JTextField user) {	
 		frame.getContentPane().add(this);
 		this.setOpaque(false);
 		JMenuBar menuBar = new JMenuBar();
@@ -129,40 +132,42 @@ public class SnakeLaunch extends JPanel{
 						+ "2.分数记录\n"
 						+ "3.随时停止与开始\n"
 						+"4.背景音乐实现\n";
-				JOptionPane.showMessageDialog(null, s,"游戏说明",JOptionPane.PLAIN_MESSAGE);
+				new Dialog(new Frame(){
+					@Override
+					public void setVisible(boolean b) {
+						// TODO Auto-generated method stub
+						super.setVisible(true);
+					}
+				});
 			}
 		});
 		rank.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				File f = new File("file_out.txt");
-				FileInputStream fis = null;
-				String name = "";
+				FileReader reader = null;
+				BufferedReader br = null;
+				String str = null;
+				StringBuffer sb = null;
 				try {
-					int len = 0;
-					byte[] b = new byte[84];
-					fis = new FileInputStream(f);
-					while((len = fis.read(b))!=-1){
-						name = new String(b);
+					// read file content from file
+					sb = new StringBuffer("");
+					reader = new FileReader("file_out.txt");
+					br = new BufferedReader(reader);
+					while ((str = br.readLine()) != null) {
+						sb.append(str + "\r\n");
 					}
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}finally {
+				} catch (Exception e2) {
+					// TODO: handle exception
+				} finally {
 					try {
-						JOptionPane.showMessageDialog(null, name,"已经注册用户成绩",JOptionPane.PLAIN_MESSAGE);
-						fis.close();
+						JOptionPane.showMessageDialog(null, sb, "已经注册用户成绩", JOptionPane.PLAIN_MESSAGE);
+						br.close();
+						reader.close();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				
-			}
-				
+				}
 			}
 		});
 		menu_map.add(item_map1);
@@ -277,14 +282,16 @@ public class SnakeLaunch extends JPanel{
 		// 在标签上画出障碍物
 		JLabel jlRock = new JLabel();
 		Ground snakeGround = new Ground();
-		KeyControlSnake keyControlSnake = new KeyControlSnake(this,jlRock);
+		
 		jlRock.setBounds(0, 0, 798, 600);
 		frame.getLayeredPane().add(jlRock, JLayeredPane.MODAL_LAYER);
 		jlRock.setOpaque(false);
 		food.setOpaque(false);
 		frame.getLayeredPane().add(food, JLayeredPane.MODAL_LAYER);
 		jframePanel.add(food);
+		KeyControlSnake keyControlSnake = new KeyControlSnake(this,jlRock);
 		ThreadControlSnake panelSnake = new ThreadControlSnake(this, snakeNode, food,user);
+		
 		panelSnake.setOpaque(false);
 		frame.getLayeredPane().add(panelSnake, JLayeredPane.MODAL_LAYER);
 		jframePanel.add(panelSnake);		
