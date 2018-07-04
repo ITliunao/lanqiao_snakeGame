@@ -24,4 +24,5 @@ public class Global {
 	static int[] scores = new int[1000];
 	static int j = 0;
 	static int pre_dre = 4;
+	static int speed = 160;
 }

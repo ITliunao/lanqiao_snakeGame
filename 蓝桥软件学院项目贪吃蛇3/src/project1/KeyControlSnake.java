@@ -34,6 +34,14 @@ public class KeyControlSnake extends JPanel{
 					Global.DIRECTION = 4;
 					
 				//使蛇开始动
+				}else if(e.getKeyCode() == KeyEvent.VK_S){
+					Global.speed -= 10;
+					
+				//使蛇开始动
+				}else if(e.getKeyCode() == KeyEvent.VK_D){
+					Global.speed += 10;
+					
+				//使蛇开始动
 				}
 			}
 		});

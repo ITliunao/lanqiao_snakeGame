@@ -17,20 +17,20 @@ public class Food extends JPanel{
 
 		foodX = random.nextInt(25)+1;
 	    //食物纵向位置范围为20——34
-	    foodY = random.nextInt(10)+1;
+	    foodY = random.nextInt(18)+1;
 	}
 	public void create(){
 		Random random = new Random();
 		foodX = random.nextInt(25)+1;
 	    //食物纵向位置范围为20——34
-	    foodY = random.nextInt(10)+1;
-	    for(int i = 0;i < launch.snakeNode.snakeX.length;i++){
-	    	for(int j =0 ;j< launch.snakeNode.snakeY.length;j++){
-	    		if(launch.snakeNode.snakeX[i] == foodX && launch.snakeNode.snakeY[i] == foodY){
+	    foodY = random.nextInt(18)+1;
+	    for(int i = 0;i < launch.snakeNode.snakeX.size();i++){
+	    	for(int j =0 ;j< launch.snakeNode.snakeY.size();j++){
+	    		if(launch.snakeNode.snakeX.get(i) == foodX && launch.snakeNode.snakeY.get(j) == foodY){
 	    			Random random2 = new Random();
 	    			foodX = random2.nextInt(25)+1;
 	    		    //食物纵向位置范围为20——34
-	    		    foodY = random2.nextInt(10)+1;
+	    		    foodY = random2.nextInt(18)+1;
 	    		}
 	    	}
 	    }

@@ -27,13 +27,18 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -48,10 +53,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 public class SnakeLaunch extends JPanel{
 	// 定义按钮，标签等组件
-	JButton buttonStart;
-	JButton buttonEnd;
-	JButton buttonPause;
+	CircleButton buttonBack;
+	CircleButton buttonStart;
+	CircleButton buttonEnd;
+	CircleButton buttonPause;
 	JLabel Score;
+	JLabel num;
 	URI uri;
 	URL url;
 	ImageIcon imgup = new ImageIcon("up.png");
@@ -60,10 +67,12 @@ public class SnakeLaunch extends JPanel{
 	ImageIcon imgright = new ImageIcon("right.png");
 	ImageIcon imgbody = new ImageIcon("body.png");
 	ImageIcon imgfood = new ImageIcon("food1.png");
-	ImageIcon start = new ImageIcon("start2.jpg");
+	ImageIcon start = new ImageIcon("start.png");
 	ImageIcon pause = new ImageIcon("pause.png");
-	ImageIcon end =  new ImageIcon("end.jpg");
+	ImageIcon end =  new ImageIcon("end.png");
 	ImageIcon rock =  new ImageIcon("brick.png");
+	ImageIcon back =  new ImageIcon("back.png");
+	ImageIcon score =  new ImageIcon("score.png");
 	// 墙壁数组
 	// 将设置好的墙壁赋值给rock数组
 	// 初始化蛇，蛇身长度为3
@@ -123,24 +132,20 @@ public class SnakeLaunch extends JPanel{
 				repaint();	
 			}
 		});
-		tx.addActionListener(new ActionListener() {
+		tx.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				String s = "这是一个贪吃蛇游戏\n" 
 						+ "已经实现的功能有：\n" 
 						+ "1.障碍物选择\n"
 						+ "2.分数记录\n"
 						+ "3.随时停止与开始\n"
 						+"4.背景音乐实现\n";
-				new Dialog(new Frame(){
-					@Override
-					public void setVisible(boolean b) {
-						// TODO Auto-generated method stub
-						super.setVisible(true);
-					}
-				});
-			}
+				JOptionPane.showMessageDialog(null,s);
+			}			
 		});
+			
 		rank.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -200,16 +205,38 @@ public class SnakeLaunch extends JPanel{
 		JPanel paneButton = new JPanel();
 		paneButton.setOpaque(false);
 		jframePanel.add(paneButton);
-		paneButton.setBounds(247, 477, 1000, 67);
+		paneButton.setBounds(0, 477, 770, 67);
 		paneButton.setLayout(null);
-		buttonStart = new JButton();
-		buttonStart.setBounds(10, 22, 70, 23);
-		buttonStart.setIcon(start);
+		
+		buttonBack = new CircleButton();
+		buttonBack.setOpaque(false);
+		buttonBack.setBounds(0, 10, 54, 54);
+		buttonBack.setIcon(back);
 		SnakeLaunch launch = this;
+		/*buttonBack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Global.RUN = 0;
+				launch.music.aau.stop();
+				launch.requestFocus();
+				frame.dispose();
+				new SnakeLogin();
+			}
+		});
+		*/
+		//paneButton.add(buttonBack);
+		
+		
+		
+		buttonStart = new CircleButton();
+		buttonStart.setBounds(260, 20,41, 41);
+		buttonStart.setIcon(start);
+		//SnakeLaunch launch = this;
 		buttonStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(Global.failed == 1){
+					Global.speed = 160;
 					Global.failed = 0;
 					Global.start = 1;
 					SnakeNode n = ThreadControlSnake.n;
@@ -222,9 +249,9 @@ public class SnakeLaunch extends JPanel{
 			}
 		});
 		paneButton.add(buttonStart);
-		buttonPause = new JButton();
+		buttonPause = new CircleButton();
 		buttonPause.setIcon(pause);
-		buttonPause.setBounds(134, 22, 70, 23);
+		buttonPause.setBounds(360, 20, 40, 40);
 		buttonPause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -234,9 +261,9 @@ public class SnakeLaunch extends JPanel{
 			}
 		});
 		paneButton.add(buttonPause);
-		buttonEnd = new JButton();
+		buttonEnd = new CircleButton();
 		buttonEnd.setIcon(end);
-		buttonEnd.setBounds(258, 22, 70, 23);
+		buttonEnd.setBounds(460, 20, 42, 42);
 		paneButton.add(buttonEnd);
 		buttonEnd.addActionListener(new ActionListener() {
 			@Override
@@ -273,11 +300,17 @@ public class SnakeLaunch extends JPanel{
 			}
 		});
 		frame.getLayeredPane().add(paneButton, JLayeredPane.MODAL_LAYER);
-		Score = new JLabel("scores:0");
-		Score.setFont(new Font("宋体", Font.BOLD, 20));
-		Score.setForeground(Color.red);
-		Score.setBounds(342, 22, 600, 23);
+		Score = new JLabel(score);
+		/*Score.setFont(new Font("宋体", Font.BOLD, 20));
+		Score.setForeground(Color.red);*/
+		Score.setBounds(560, -10, 100, 100);
 		paneButton.add(Score);
+		
+		num = new JLabel("score:0");
+		num.setFont(new Font("宋体", Font.BOLD, 20));
+		num.setForeground(Color.red);
+		num.setBounds(670, 20, 150, 50);
+		paneButton.add(num);
 		frame.getLayeredPane().add(paneButton, JLayeredPane.MODAL_LAYER);
 		// 在标签上画出障碍物
 		JLabel jlRock = new JLabel();
@@ -315,19 +348,18 @@ public class SnakeLaunch extends JPanel{
 		
 	}
 	public void drawNode(Graphics g, SnakeNode n) {
-		g.setColor(new Color(90, 189, 177));
 		if(Global.failed == 0 ){
 				for (int i = 0; i <= n.len; i++) {
 					if(i==0 &&Global.DIRECTION == 1){
-						imgup.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+						imgup.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 					}else if(i==0 &&Global.DIRECTION == 2){
-						imgdown.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+						imgdown.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 					}else if(i==0 &&Global.DIRECTION == 3){
-						imgleft.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+						imgleft.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 					}else if(i==0 &&Global.DIRECTION == 4){
-						imgright.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+						imgright.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 					}
-					imgbody.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+					imgbody.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 					
 				}
 				Global.start = 0;
@@ -335,15 +367,15 @@ public class SnakeLaunch extends JPanel{
 		}else{
 			for (int i = 0; i <= 2; i++) {
 				if(i==0 &&Global.DIRECTION == 1){
-					imgup.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+					imgup.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 				}else if(i==0 &&Global.DIRECTION == 2){
-					imgdown.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+					imgdown.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 				}else if(i==0 &&Global.DIRECTION == 3){
-					imgleft.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+					imgleft.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 				}else if(i==0 &&Global.DIRECTION == 4){
-					imgright.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+					imgright.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 				}
-				imgbody.paintIcon(this, g, n.snakeX[i]*20, n.snakeY[i]*20);
+				imgbody.paintIcon(this, g, n.snakeX.get(i)*20, n.snakeY.get(i)*20);
 			}
 		}
 		
